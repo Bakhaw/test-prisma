@@ -8,13 +8,14 @@ import filterDatas from "./filterDatas";
  */
 function generateTableHead(tbl) {
   const columns = [
-    "Nom",
-    "Prénom",
-    "Âge",
-    "Couleur des yeux",
+    "",
+    "Lastname",
+    "Firstname",
+    "Age",
+    "Eye color",
     "Email",
-    "Adresse",
-    "Entreprise",
+    "Address",
+    "Company",
   ];
 
   const tblHead = document.createElement("thead");
@@ -46,9 +47,26 @@ function generateTableBody(tbl, datas) {
 
     Object.values(data).forEach((val) => {
       const cell = document.createElement("td");
-      const cellText = document.createTextNode(val);
-      cell.appendChild(cellText);
-      row.appendChild(cell);
+
+      if (val.type) {
+        if (val.type === "img") {
+          const img = document.createElement("img");
+          img.src = val.value;
+          cell.appendChild(img);
+          row.appendChild(cell);
+        }
+
+        if (val.type === "div") {
+          const div = document.createElement("div");
+          div.className = `div-${val.value}`;
+          cell.appendChild(div);
+          row.appendChild(cell);
+        }
+      } else {
+        const cellText = document.createTextNode(val);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
     });
 
     tblBody.appendChild(row);
@@ -61,16 +79,23 @@ function generateTableBody(tbl, datas) {
  * Table initialization
  */
 export default function generateTable() {
-  const tbl = document.createElement("table");
+  const tbl = document.querySelector("#userTable");
   const filterJSON = filterDatas(datasJSON);
 
   // filtering datas to have an array that only contains values we are displaying
   const dataBody = filterJSON.map(
-    ({ name, age, eyeColor, email, address, company }) => ({
+    ({ address, age, company, email, eyeColor, name, picture }) => ({
+      picture: {
+        type: "img",
+        value: picture,
+      },
       firstName: name.first,
       lastName: name.last,
       age,
-      eyeColor,
+      eyeColor: {
+        type: "div",
+        value: eyeColor,
+      },
       email,
       address,
       company,
@@ -80,6 +105,6 @@ export default function generateTable() {
   generateTableHead(tbl);
   generateTableBody(tbl, dataBody);
 
-  document.body.appendChild(tbl);
-  tbl.setAttribute("border", "1");
+  const app = document.querySelector(".app");
+  app.appendChild(tbl);
 }

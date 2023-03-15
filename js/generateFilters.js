@@ -44,13 +44,16 @@ function updateAgeSelectedOption(urlParams) {
  * Initialize events listener so we can update the query parameters in the URL whenever the <select> tag value changes
  */
 function initFilterEvents() {
-  document.getElementById("eyeColorSelect").addEventListener("change", (e) => {
+  const eyeColorSelect = document.getElementById("eyeColorSelect");
+  const ageSelect = document.getElementById("ageSelect");
+
+  eyeColorSelect.addEventListener("change", (e) => {
     if ("URLSearchParams" in window) {
       insertUrlParam("eyeColor", e.target.value);
     }
   });
 
-  document.getElementById("ageSelect").addEventListener("change", (e) => {
+  ageSelect.addEventListener("change", (e) => {
     if ("URLSearchParams" in window) {
       insertUrlParam("age", e.target.value);
     }
